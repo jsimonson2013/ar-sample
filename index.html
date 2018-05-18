@@ -9,8 +9,8 @@
 		<a-asset-item id="obj" src="models/monkey.obj"></a-asset-item>
 		<a-asset-item id="mtl" src="models/monkey.mtl"></a-asset-item>
     <a-marker preset="hiro">
-		<a-box position='0 0.5 0' material='color: red;'></a-box>
-<!--      <a-entity objmodel="obj: #obj; mtl: #mtl" position='0 0.5 0'></a-entity>i -->
+			<!--<a-box position='0 0.5 0' material='color: red;'></a-box>-->
+    	<a-obj-model src="#obj" mtl="#mtl" position='0 0.5 0'></a-obj-model>
     </a-marker>
     <a-entity camera></a-entity>
   </a-scene>
