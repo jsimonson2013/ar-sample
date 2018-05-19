@@ -5,14 +5,41 @@
 <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"> </script>
 </head>
 <body style='margin : 0px; overflow: hidden;'>
-  <a-scene embedded arjs>
+  <a-scene id="scene" embedded arjs>
 		<a-asset-item id="obj" src="models/monkey.obj"></a-asset-item>
 		<a-asset-item id="mtl" src="models/monkey.mtl"></a-asset-item>
     <a-marker preset="hiro">
-			<!--<a-box position='0 0.5 0' material='color: red;'></a-box>-->
-    	<a-obj-model src="#obj" mtl="#mtl" position='0 0.5 0'></a-obj-model>
+    	<a-obj-model id="model" src="#obj" mtl="#mtl" position='0 0.5 0'></a-obj-model>
     </a-marker>
     <a-entity camera></a-entity>
   </a-scene>
 </body>
+<script>
+	const scene = document.getElementById('scene')
+
+	scene.addEventListener('touchstart', event => {startingTouch(event)})
+	scene.addEventListener('touchend', event => {endingTouch(event)})
+	scene.addEventListener('touchmove', event => {movingTouch(event)})
+
+	const model = document.getElementById('model')
+
+	const startingTouch = event => {
+
+	}
+
+	const endingTouch = event => {
+
+	}
+
+	const movingTouch = event => {
+		if (!model) return
+
+		let touches = event.changedTouches
+
+		for (touch of touches) {
+			//model.setAttribute('rotation', 'x', touch.pageY)
+			model.setAttribute('rotation', 'y', touch.pageX)
+		}
+	}
+</script>
 <html>
