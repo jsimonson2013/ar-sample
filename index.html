@@ -23,22 +23,40 @@
 
 	const model = document.getElementById('model')
 
-	const startingTouch = event => {
+	let scaling = false
 
+	const startingTouch = event => {
+		if (event.touches.length == 2) scaling = true
 	}
 
 	const endingTouch = event => {
-
+		scaling = false
 	}
 
 	const movingTouch = event => {
 		if (!model) return
 
+		const rot = model.getAttribute('rotation')
+
 		let touches = event.changedTouches
 
+		//if (scaling) scale(touches)
+
+		else {
+			for (touch of touches) {
+				model.setAttribute('rotation', {
+					'x': touch.pageY,
+					'y': touch.pageX,
+					'z': rot.z
+				})
+			}
+		}
+	}
+
+	const scale = touches => {
+		let prev = NULL
 		for (touch of touches) {
-			//model.setAttribute('rotation', 'x', touch.pageY)
-			model.setAttribute('rotation', 'y', touch.pageX)
+			const dist = Math.hypot(prev.pageX - touch.pageX, prev.pageY - touch.pageY)
 		}
 	}
 </script>
