@@ -2,7 +2,8 @@
 <head>
 <title>AR Sample</title>
 <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
-<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"> </script>
+<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"></script>
+<script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
 </head>
 <body style='margin : 0px; overflow: hidden;'>
   <a-scene id="scene" embedded arjs>
@@ -16,47 +17,38 @@
 </body>
 <script>
 	const scene = document.getElementById('scene')
-
-	scene.addEventListener('touchstart', event => {startingTouch(event)})
-	scene.addEventListener('touchend', event => {endingTouch(event)})
 	scene.addEventListener('touchmove', event => {movingTouch(event)})
-
 	const model = document.getElementById('model')
 
-	let scaling = false
+	const manager = new Hammer.Manager(scene)
+	const pinch = new Hammer.Pinch()
+	manager.add(pinch)
 
-	const startingTouch = event => {
-		if (event.touches.length == 2) scaling = true
-	}
+	manager.on('pinch', function(ev) {
+		if (!model) return
 
-	const endingTouch = event => {
-		scaling = false
-	}
+		const curr = model.getAttribute('scale')
+		const scale = (ev.scale - 1)*0.01
+
+		model.setAttribute('scale', {
+			'x': curr.x + scale,
+			'y': curr.y + scale,
+			'z': curr.z + scale
+		})
+	})
 
 	const movingTouch = event => {
 		if (!model) return
 
-		const rot = model.getAttribute('rotation')
-
+		const curr = model.getAttribute('rotation')
 		let touches = event.changedTouches
 
-		//if (scaling) scale(touches)
-
-		else {
-			for (touch of touches) {
-				model.setAttribute('rotation', {
-					'x': touch.pageY,
-					'y': touch.pageX,
-					'z': rot.z
-				})
-			}
-		}
-	}
-
-	const scale = touches => {
-		let prev = NULL
 		for (touch of touches) {
-			const dist = Math.hypot(prev.pageX - touch.pageX, prev.pageY - touch.pageY)
+			model.setAttribute('rotation', {
+				'x': curr.x - touch.pageY*0.01,
+				'y': curr.y + touch.pageX*0.01,
+				'z': curr.z
+			})
 		}
 	}
 </script>
